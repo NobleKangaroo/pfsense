@@ -208,7 +208,7 @@ events.push(function(){
 
 	// Create an object defining the widget refresh AJAX call
 	var logsObject = new Object();
-	logsObject.name = "Gateways";
+	logsObject.name = "Firewall Logs";
 	logsObject.url = "/widgets/widgets/log.widget.php";
 	logsObject.callback = logs_callback;
 	logsObject.parms = postdata;
@@ -239,7 +239,7 @@ $pconfig['nentriesinterval'] = isset($user_settings['widgets'][$widgetkey]['filt
 			<label for="filterlogentries" class="col-sm-4 control-label"><?=gettext('Number of entries')?></label>
 			<div class="col-sm-6">
 				<input type="number" name="filterlogentries" id="filterlogentries" value="<?=$pconfig['nentries']?>" placeholder="5"
-					min="1" max="20" class="form-control" />
+					min="1" max="50" class="form-control" />
 			</div>
 		</div>
 
