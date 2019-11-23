@@ -33,7 +33,7 @@ require_once("/usr/local/www/widgets/include/gateways.inc");
 
 if (!function_exists('compose_table_body_contents')) {
 	function compose_table_body_contents($widgetkey) {
-		global $user_settings;
+		global $config, $g, $user_settings;
 
 		$rtnstr = '';
 
@@ -59,7 +59,12 @@ if (!function_exists('compose_table_body_contents')) {
 			$rtnstr .= "<tr>\n";
 			$rtnstr .= 	"<td>\n";
 			$rtnstr .= htmlspecialchars($gateway['name']) . "<br />";
-			$rtnstr .= '<div id="gateway' . $counter . '" style="display:inline"><b>';
+
+			if (isset($config['system']['webgui']['privacymode']) && strtolower($gateway['friendlyiface']) == strtolower($g['wan_interface_name'])) {
+				$rtnstr .= '<div id="gateway' . $counter . '" style="display:inline"><b style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);">';
+			} else {
+				$rtnstr .= '<div id="gateway' . $counter . '" style="display:inline"><b>';
+			}
 
 			$monitor_address = "";
 			$monitor_address_disp = "";

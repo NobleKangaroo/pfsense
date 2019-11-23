@@ -90,6 +90,7 @@ $pconfig['dnslocalhost'] = isset($config['system']['dnslocalhost']);
 //$pconfig['dashboardperiod'] = isset($config['widgets']['period']) ? $config['widgets']['period']:"10";
 $pconfig['roworderdragging'] = isset($config['system']['webgui']['roworderdragging']);
 $pconfig['loginshowhost'] = isset($config['system']['webgui']['loginshowhost']);
+$pconfig['privacymode'] = isset($config['system']['webgui']['privacymode']);
 $pconfig['requirestatefilter'] = isset($config['system']['webgui']['requirestatefilter']);
 
 if (!$pconfig['timezone']) {
@@ -325,6 +326,8 @@ if ($_POST) {
 		}
 
 		$config['system']['webgui']['loginshowhost'] = $_POST['loginshowhost'] ? true:false;
+
+		$config['system']['webgui']['privacymode'] = $_POST['privacymode'] ? true:false;
 
 		if ($_POST['webguifixedmenu']) {
 			$config['system']['webgui']['webguifixedmenu'] = $_POST['webguifixedmenu'];
@@ -702,6 +705,14 @@ $section->addInput(new Form_Checkbox(
 	'Show hostname on login banner',
 	$pconfig['loginshowhost']
 ));
+
+$section->addInput(new Form_Checkbox(
+    'privacymode',
+    'Privacy Mode',
+    'Blur WAN IPs, system hostname, serial, Netgate device ID, and logged in username on dashboard',
+    $pconfig['privacymode']
+));
+
 /*
 $section->addInput(new Form_Input(
 	'dashboardperiod',

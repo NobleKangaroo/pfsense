@@ -124,7 +124,11 @@ foreach ($ifdescrs as $ifdescr => $ifname):
 			<?php endif; ?>
 		</td>
 
-		<td <?=($ifinfo['dhcplink'] ? ' title="via dhcp"':'')?>>
+		<?php if (isset($config['system']['webgui']['privacymode']) && strtolower($ifname) == strtolower($g['wan_interface_name'])): ?>
+        		<td style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);" <?=($ifinfo['dhcplink'] ? ' title="via dhcp"':'')?>>
+		<?php else: ?>
+			<td <?=($ifinfo['dhcplink'] ? ' title="via dhcp"':'')?>>
+		<?php endif; ?>
 			<?php if (empty($ifinfo['ipaddr']) && empty($ifinfo['ipaddrv6'])): ?>
 				n/a
 			<?php else: ?>

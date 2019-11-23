@@ -156,7 +156,17 @@ $temp_use_f = (isset($user_settings['widgets']['thermal_sensors-0']) && !empty($
 ?>
 		<tr>
 			<th><?=gettext("Name");?></th>
+<?php
+		if (isset($config['system']['webgui']['privacymode'])):
+?>
+			<td style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);"><?php echo htmlspecialchars($config['system']['hostname'] . "." . $config['system']['domain']); ?></td>
+<?php
+		else:
+?>
 			<td><?php echo htmlspecialchars($config['system']['hostname'] . "." . $config['system']['domain']); ?></td>
+<?php
+		endif;
+?>
 		</tr>
 <?php
 	endif;
@@ -165,8 +175,16 @@ $temp_use_f = (isset($user_settings['widgets']['thermal_sensors-0']) && !empty($
 ?>
 		<tr>
 			<th><?=gettext("User");?></th>
+<?php
+		if (isset($config['system']['webgui']['privacymode'])):
+?>
+			<td style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);"><?php echo htmlspecialchars(get_config_user()); ?></td>
+<?php
+		else:
+?>
 			<td><?php echo htmlspecialchars(get_config_user()); ?></td>
 <?php
+		endif;
 	endif;
 	if (!in_array('system', $skipsysinfoitems)):
 		$rows_displayed = true;
@@ -175,26 +193,45 @@ $temp_use_f = (isset($user_settings['widgets']['thermal_sensors-0']) && !empty($
 			<th><?=gettext("System");?></th>
 			<td>
 <?php
-				$platform = system_identify_specific_platform();
-				if (isset($platform['descr'])) {
-					echo $platform['descr'];
-				} else {
-					echo gettext('Unknown system');
-				}
+			$platform = system_identify_specific_platform();
+			if (isset($platform['descr'])):
+?>
+				<?=$platform['descr'];?>
+<?php
+			else:
+?>
+				<?=gettext('Unknown system');?>
+<?php
+			endif;
 
-				$serial = system_get_serial();
-				if (!empty($serial)) {
-					print("<br />" . gettext("Serial:") .
-					    " <strong>{$serial}</strong>\n");
-				}
+			$serial = system_get_serial();
+			if (!empty($serial)):
+				if (isset($config['system']['webgui']['privacymode'])):
+?>
+					<br />
+					<?=gettext("Serial:")?> <strong style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);"><?=$serial?></strong>
+<?php
+				else:
+?>
+					<?=gettext("Serial:")?> <strong><?=$serial?></strong>
+<?php
+				endif;
+			endif;
 
-				// If the uniqueID is available, display it here
-				$uniqueid = system_get_uniqueid();
-				if (!empty($uniqueid)) {
-					print("<br />" .
-					    gettext("Netgate Device ID:") .
-					    " <strong>{$uniqueid}</strong>");
-				}
+			// If the uniqueID is available, display it here
+			$uniqueid = system_get_uniqueid();
+			if (!empty($uniqueid)):
+				if (isset($config['system']['webgui']['privacymode'])):
+?>
+   					<br />
+    					<?=gettext("Netgate Device ID:")?> <strong style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);"><?=$uniqueid?></strong>
+<?php
+				else:
+?>
+    					<?=gettext("Netgate Device ID:")?> <strong><?=$uniqueid?></strong>
+<?php
+				endif;
+			endif;
 ?>
 			</td>
 		</tr>
