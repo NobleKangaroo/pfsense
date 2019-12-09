@@ -147,9 +147,9 @@ if (!$_REQUEST['ajax']) {
 		$srcIP = str_replace(':', ':<wbr>', $srcIP);
 		$dstIP = str_replace(':', ':<wbr>', $dstIP);
 
-		// Get all gateway IPs for privacy mode below
+		// Get gateway IP addresses for privacy mode
 		$gwIPs = array_filter(array_map(
-				function($obj) { return get_interface_ip($obj['interface']); },
+				function($obj) { return get_interface_ip($obj['friendlyiface']); },
 				array_values(return_gateways_array())
 			), 'strlen');
 ?>

@@ -67,6 +67,12 @@ $skipinterfaces = explode(",", $user_settings['widgets'][$widgetkey]['iffilter']
 $widgetkey_nodash = str_replace("-", "", $widgetkey);
 $interface_is_displayed = false;
 
+// Get gateway IP addresses for privacy mode
+$gwIPs = array_map(
+		function($obj) { return get_interface_ip($obj['friendlyiface']); },
+		array_values(return_gateways_array())
+	);
+
 foreach ($ifdescrs as $ifdescr => $ifname):
 	if (in_array($ifdescr, $skipinterfaces)) {
 		continue;
@@ -124,7 +130,7 @@ foreach ($ifdescrs as $ifdescr => $ifname):
 			<?php endif; ?>
 		</td>
 
-		<?php if (isset($config['system']['webgui']['privacymode']) && strtolower($ifname) == strtolower($g['wan_interface_name'])): ?>
+		<?php if (isset($config['system']['webgui']['privacymode']) && (!empty($ifinfo['ipaddr']) || !empty($ifinfo['ipaddrv6'])) && in_array(strtolower($ifname), $gwIPs)): ?>
         		<td style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);" <?=($ifinfo['dhcplink'] ? ' title="via dhcp"':'')?>>
 		<?php else: ?>
 			<td <?=($ifinfo['dhcplink'] ? ' title="via dhcp"':'')?>>

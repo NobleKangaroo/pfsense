@@ -33,7 +33,7 @@ require_once("/usr/local/www/widgets/include/gateways.inc");
 
 if (!function_exists('compose_table_body_contents')) {
 	function compose_table_body_contents($widgetkey) {
-		global $config, $g, $user_settings;
+		global $config, $user_settings;
 
 		$rtnstr = '';
 
@@ -50,6 +50,12 @@ if (!function_exists('compose_table_body_contents')) {
 		$hiddengateways = explode(",", $user_settings["widgets"][$widgetkey]["gatewaysfilter"]);
 		$gw_displayed = false;
 
+		// Get gateway IP addresses for privacy mode
+		$gwIPs = array_map(
+				function($obj) { return get_interface_ip($obj['friendlyiface']); },
+				array_values(return_gateways_array())
+			);
+
 		foreach ($a_gateways as $gname => $gateway) {
 			if (in_array($gname, $hiddengateways)) {
 				continue;
@@ -60,7 +66,7 @@ if (!function_exists('compose_table_body_contents')) {
 			$rtnstr .= 	"<td>\n";
 			$rtnstr .= htmlspecialchars($gateway['name']) . "<br />";
 
-			if (isset($config['system']['webgui']['privacymode']) && strtolower($gateway['friendlyiface']) == strtolower($g['wan_interface_name'])) {
+			if (isset($config['system']['webgui']['privacymode']) && is_ipaddr($gateway['gateway']) && in_array(get_interface_ip($gateway['friendlyiface']), $gwIPs)) {
 				$rtnstr .= '<div id="gateway' . $counter . '" style="display:inline"><b style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);">';
 			} else {
 				$rtnstr .= '<div id="gateway' . $counter . '" style="display:inline"><b>';
