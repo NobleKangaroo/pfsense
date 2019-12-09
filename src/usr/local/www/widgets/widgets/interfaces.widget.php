@@ -130,7 +130,7 @@ foreach ($ifdescrs as $ifdescr => $ifname):
 			<?php endif; ?>
 		</td>
 
-		<?php if (isset($config['system']['webgui']['privacymode']) && (!empty($ifinfo['ipaddr']) || !empty($ifinfo['ipaddrv6'])) && in_array(strtolower($ifname), $gwIPs)): ?>
+		<?php if (isset($config['system']['webgui']['privacymode']) && (!empty($ifinfo['ipaddr']) || !empty($ifinfo['ipaddrv6'])) && in_array(get_interface_ip($ifdescr), $gwIPs)): ?>
         		<td style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);" <?=($ifinfo['dhcplink'] ? ' title="via dhcp"':'')?>>
 		<?php else: ?>
 			<td <?=($ifinfo['dhcplink'] ? ' title="via dhcp"':'')?>>
