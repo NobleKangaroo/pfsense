@@ -146,6 +146,12 @@ if (!$_REQUEST['ajax']) {
 		// Putting <wbr> tags after each ':'  allows the string to word-wrap at that point
 		$srcIP = str_replace(':', ':<wbr>', $srcIP);
 		$dstIP = str_replace(':', ':<wbr>', $dstIP);
+
+		// Get all gateway IPs for privacy mode below
+		$gwIPs = array_filter(array_map(
+				function($obj) { return get_interface_ip($obj['interface']); },
+				array_values(return_gateways_array())
+			), 'strlen');
 ?>
 		<tr>
 			<td><a href="#" onclick="javascript:getURL('status_logs_filter.php?getrulenum=<?php echo "{$filterent['rulenum']},{$filterent['tracker']},{$filterent['act']}"; ?>', outputrule);"
@@ -156,10 +162,18 @@ if (!$_REQUEST['ajax']) {
 			</a></td>
 			<td title="<?=htmlspecialchars($filterent['time'])?>"><?=substr(htmlspecialchars($filterent['time']),0,-3)?></td>
 			<td><?=htmlspecialchars($filterent['interface']);?></td>
-			<td><a href="diag_dns.php?host=<?=$filterent['srcip']?>"
+			<?php if (isset($config['system']['webgui']['privacymode']) && in_array($filterent['srcip'], $gwIPs)): ?>
+				<td><a style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);" href="diag_dns.php?host=<?=$filterent['srcip']?>"
+			<?php else: ?>
+				<td><a href="diag_dns.php?host=<?=$filterent['srcip']?>"
+			<?php endif; ?>
 				title="<?=gettext("Reverse Resolve with DNS");?>"><?=$srcIP?></a>
 			</td>
-			<td><a href="diag_dns.php?host=<?=$filterent['dstip']?>"
+			<?php if (isset($config['system']['webgui']['privacymode']) && in_array($filterent['dstip'], $gwIPs)): ?>
+				<td><a style="color: transparent; text-shadow: 0 0 10px rgba(0,0,0,0.5);" href="diag_dns.php?host=<?=$filterent['dstip']?>"
+			<?php else: ?>
+				<td><a href="diag_dns.php?host=<?=$filterent['dstip']?>"
+			<?php endif; ?>
 				title="<?=gettext("Reverse Resolve with DNS");?>"><?=$dstIP?></a><?php
 				if ($filterent['dstport']) {
 					print ':' . htmlspecialchars($filterent['dstport']);
